@@ -13,8 +13,7 @@ https://github.com/simnibs/simnibs
 
 Simulation of personalized e-fields can be found in the link below
 
-https://github.com/TIGRLab/nextflow-simnibs/blob/main/README.md
-
+https://github.com/TIGRLab/nextflow-simnibs
 
 ## Computation of the overlap overlap between connectivity and e-field maps.
 
