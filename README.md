@@ -14,6 +14,7 @@ ciftify/2.3.3
 ## Requirements:
 1. Functional connectivity maps in CIFTI space
 2. E-field maps in CIFTI space
+3. Vertex area in CIFTI space
 
 ## Pipelines:
 
