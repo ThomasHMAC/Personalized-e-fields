@@ -1,0 +1,142 @@
+---
+title: "UBC-TMS"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE}
+library(ggpubr)
+library(rms)
+library(lattice)
+library(rstatix)
+library(ggplot2)
+library(tidyr)
+library(car)
+library(broom)
+library(car)
+library(tidyverse)
+```
+
+# Plotting reliability scores between rs-fMRI0 and rs-fMRI1
+```{r}
+library(ggplot2)
+library(tidyr)
+df <- read.csv("/projects/ttan/UBC-TMS/analysis_LsgACC/L_sgACC_RDLPFC_conn_maps/L_sgACC_RDLPFC_connectivity_reliability_over_time.csv")
+df <- df %>% rename('rs-fMRI0_rs-fMRI1' = rs.fMRI01_rs.fMRI03)
+df.long <- df[,c("subid","rs-fMRI0_rs-fMRI1")] %>% pivot_longer(cols= c(`rs-fMRI0_rs-fMRI1`), names_to = "CorrVal")
+
+ggplot(df.long, aes(x=subid,y=value,col=CorrVal,group=CorrVal))  + 
+  geom_point() + geom_line() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1 , vjust = 0.5)) + ggtitle("Plot of sgACC - RDLPFC connectivity R-values \n by sessions")
+p <-ggplot(df.long, aes(CorrVal,value)) + geom_violin(colour = "lightcoral") + geom_point(colour="black") + geom_hline(yintercept = 0.45) + ylab("Correlation value") + xlab("session")
+ggsave("/projects/ttan/UBC-TMS/SupplementaryFigure2_updated.png",p,width = 1200, height=1500, units=c("px"))
+```
+
+1. Linear models 
+
+## Models via efield approach
+
+```{r}
+combined_df <- read.csv("/projects/ttan/UBC-TMS/analysis_LsgACC/conn_x_efield/UBC_34_participants_dotproduct_behav_data_wk4.csv")
+combined_df$PostpreMADRS = combined_df$PostpreMADRS * -1
+
+#Hierarchical regression model
+#Add all covariate to model first then add overlap
+#TMS-fMRI session
+mod_lm_neg_01 <- lm(combined_df$PostpreMADRS ~ combined_df$active_TMS_FD + combined_df$age + combined_df$sex_id + combined_df$preMADRS)
+summary(mod_lm_neg_01)
+car::Anova(mod_lm_neg_01)
+
+mod_lm_neg_02 <- lm(combined_df$PostpreMADRS ~ combined_df$active_TMS_FD + combined_df$age +
+                    combined_df$sex_id + combined_df$preMADRS + combined_df$ses.02_sum_neg_dotproduct)
+summary(mod_lm_neg_02)
+car::Anova(mod_lm_neg_02)
+
+summary(mod_lm_neg_05)$adj.r.squared - summary(mod_lm_neg_04)$adj.r.squared
+
+anova(mod_lm_neg_01, mod_lm_neg_02, test ="F")
+
+#rs-fMRI0 session
+mod_lm_neg_03 <- lm(combined_df$PostpreMADRS ~ combined_df$baseline_FD + combined_df$age + combined_df$sex_id + combined_df$preMADRS)
+summary(mod_lm_neg_03)
+car::Anova(mod_lm_neg_03)
+
+mod_lm_neg_04 <- lm(combined_df$PostpreMADRS ~ combined_df$baseline_FD + combined_df$age +
+                    combined_df$sex_id + combined_df$preMADRS + combined_df$ses.01_sum_neg_dotproduct)
+summary(mod_lm_neg_04)
+car::Anova(mod_lm_neg_04)
+summary(mod_lm_neg_04)$adj.r.squared - summary(mod_lm_neg_03)$adj.r.squared
+anova(mod_lm_neg_03, mod_lm_neg_04, test ="F")
+
+# Model Checking
+
+xyplot(PostpreMADRS~ses.02_sum_neg_dotproduct, data=combined_01, xlab="FC", ylab="Improvement in MADRS score", type=c('p','r'))
+
+# Models with ROI proximate target approach
+combined_df <- read.csv("/projects/ttan/UBC-TMS/analysis_LsgACC/RDLPFC_20mm_sphere/34_participants_ROI_approach_behav_data.csv")
+combined_df$PostpreMADRS = combined_df$PostpreMADRS * -1
+
+#TMS-fMRI session
+mod_lm_neg_05 <- lm(combined_df$PostpreMADRS ~ combined_df$active_TMS_FD + combined_df$age + combined_df$sex_id + combined_df$preMADRS)
+summary(mod_lm_neg_05)
+car::Anova(mod_lm_neg_05)
+
+mod_lm_neg_06 <- lm(combined_df$PostpreMADRS ~ combined_df$active_TMS_FD + combined_df$age +
+                    combined_df$sex_id + combined_df$preMADRS + combined_df$ses.02_sum_neg_dotproduct)
+summary(mod_lm_neg_06)
+car::Anova(mod_lm_neg_06)
+
+summary(mod_lm_neg_06)$adj.r.squared - summary(mod_lm_neg_05)$adj.r.squared
+
+anova(mod_lm_TMS_fMRI, mod_lm_TMS_fMRI_neg, test ="F")
+
+#rs-fMRI0 session
+mod_lm_neg_07 <- lm(combined_df$PostpreMADRS ~ combined_df$baseline_FD + combined_df$age + combined_df$sex_id + combined_df$preMADRS)
+summary(mod_lm_neg_07)
+car::Anova(mod_lm_neg_07)
+
+mod_lm_neg_08 <- lm(combined_df$PostpreMADRS ~ combined_df$baseline_FD + combined_df$age + combined_df$sex_id + combined_df$preMADRS + combined_df$ses.01_sum_neg_dotproduct)
+summary(mod_lm_neg_08)
+car::Anova(mod_lm_neg_08)
+summary(mod_lm_neg_08)$adj.r.squared - summary(mod_lm_neg_07)$adj.r.squared
+anova(mod_lm_neg_06, mod_lm_neg_05, test ="F")
+
+# Model Checking
+
+xyplot(PostpreMADRS~ses.02_sum_neg_dotproduct, data=combined_01, xlab="FC", ylab="Improvement in MADRS score", type=c('p','r'))
+
+# Normality residual plt
+qqnorm(resid(mod_lm_neg_02), main="Normal Q-Q plot for Residuals")
+qqline(resid(mod_lm_neg_02))
+
+```
+
+## Baseline and post MADRS depression score
+
+```{r}
+library(dplyr)
+
+df <- read.csv("/projects/ttan/UBC-TMS/analysis_LsgACC/PALM/UBC_participants_data_0.45_cutoff_updated.csv")
+data <- df[1:34,c('subid', 'pre_MADRS', 'post_MADRS')]
+data <- data %>% rename('baseline' = pre_MADRS , 'post-rTMS' = post_MADRS)
+df.long <- data[1:34,] %>% pivot_longer(cols= c('baseline', 'post-rTMS'), values_to = "depression_score", names_to = "time")
+
+ggplot(df.long, aes(y=depression_score, x=time, group=subid)) + theme(text = element_text(size=20)) +
+    geom_line() + stat_smooth(aes(group = 1), method = "lm", se = TRUE, colour="#D55E00", size=2) +
+    stat_summary(aes(group = 1), geom = "point", fun = mean, shape = 17, size = 3, colour="#D55E00") +
+    geom_point() + xlab('Timepoint') + ylab('Depression score') + ylim(3, 45) +theme_classic() + theme(text=element_text(family="Times New Roman",face="bold",size = 14),axis.title.x = element_text(margin = margin (t=20,0,0,0)),axis.title.y = element_text(margin = margin(t=0,20,0,0))) # can set limits to whatever makes sense for your depression scores
+
+
+ggsave("/projects/ttan/UBC-TMS/SupplementaryFigure3_wk4_MADRS.png",width = 1200, height=1000, units=c("px"))
+
+# T-test for pre and post MADRS total score
+t.test(data$post_MADRS,data$pre_MADRS,paired = TRUE,alternative="less")
+
+```
+
+
