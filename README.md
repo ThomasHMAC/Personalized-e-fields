@@ -7,15 +7,20 @@ Perform overlap calculation between functional connectiviy, e-fields, and surfac
 
 ## Pipelines:
 
+SimNIBS reconstructs a tetrahedral head mesh from T1-weight image
+
+https://github.com/simnibs/simnibs
+
 Simulation of personalized e-fields can be found in the link below
 
 https://github.com/TIGRLab/nextflow-simnibs/blob/main/README.md
 
-Computation of the overlap overlap between connectivity and e-field maps.
+
+## Computation of the overlap overlap between connectivity and e-field maps.
 
 Personalized_efields_approach/sum_connectivity_efields.py
 
-Computation of target negative connectivity via ROI approach
+## Computation of target negative connectivity via ROI approach
 
 ROI_target_connectivity_approach/sum_target_connectivity.py
 
