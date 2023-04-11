@@ -23,6 +23,8 @@ SimNIBS - perform reconstruction of a tetrahedral head mesh from T1-weight image
 
 https://github.com/simnibs/simnibs
 
+```mri2mesh.sh``` - outdated command to generate head mesh from simNIBS/3.2.2
+
 simNIBS to Cifti Space - perform surface mapping from SimNIBS native surface outputs to HCP fs_LR32kspace
 
 https://github.com/TIGRLab/nextflow-simnibs
