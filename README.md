@@ -19,6 +19,7 @@ https://github.com/TIGRLab/nextflow-simnibs
 
 Personalized_efields_approach/sum_connectivity_efields.py - calculate the overlap between connectivity, efields, and surface area maps
 
+```
 Usage:
    meants_dotproduct [options] <func> <seed> <L_va> <R_va>
 Arguments:
@@ -31,7 +32,8 @@ Options:
     --outputcsv PATH     Specify the output filename
     --debug              Debug logging
     -h, --help           Prints this message
-    
+```   
+   
 ### Computation of target negative connectivity via ROI approach
 
 ROI_target_connectivity_approach/sum_target_connectivity.py - calculate the connectiviy proximate to the target and surface area maps 
