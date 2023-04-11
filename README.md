@@ -63,3 +63,5 @@ Options:
     --debug              Debug logging
     -h, --help           Prints this message
 ```
+### Hierarchical regression analysis 
+```linear_models.Rmd`` - perform hierarchical regression analysis via e-fields and ROI target approach
