@@ -1,6 +1,16 @@
 # Personalized-e-fields
 Perform overlap calculation between functional connectiviy, e-fields, and surface vertex area maps in fs_LR32k space.
 
+
+## Dependencies:
+```
+connectome-workbench/1.3.2
+freesurfer/6.0.1
+matlab/R2017b
+palm-alpha111
+ciftify/2.3.3
+```
+
 ## Requirements:
 1. Functional connectivity maps in CIFTI space
 2. E-field maps in CIFTI space
