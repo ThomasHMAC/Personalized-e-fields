@@ -6,6 +6,7 @@ Perform overlap calculation between functional connectiviy, e-fields, and surfac
 ```
 connectome-workbench/1.3.2
 freesurfer/6.0.1
+FSL/6.0.1
 matlab/R2017b
 palm-alpha/111
 ciftify/2.3.3
